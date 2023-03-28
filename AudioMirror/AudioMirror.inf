@@ -169,10 +169,10 @@ KmdfLibraryVersion = $KMDFVERSION$
 
 [Strings]
 SPSVCINST_ASSOCSERVICE= 0x00000002
-OrganizationName="Jannes Peters"
+OrganizationName="Gaudio Lab, Inc."
 DriverDisplayName="AudioMirror Drivers"
 DiskName="AudioMirror Installation Disk"
-AudioMirror.DeviceDesc="AudioMirror Virtual Device"
+AudioMirror.DeviceDesc="Gaudio Lab Virtual Device"
 AudioMirror.SVCDESC="AudioMirror Service"
 
 AudioMirror.WaveCapture.FriendlyName="AudioMirror Wave Input"
@@ -195,11 +195,11 @@ SpkOutputNameGUID = {9919ca3f-29ca-4728-bbb7-07cdf682e248}
 MicInputNameGUID = {618ad392-bec0-4b2d-bd89-e505e169dd55}
 SpkInputNameGUID = {1c7320d9-2fce-4214-94fd-ac1acff4122a}
 
-MicInputName = "JJOC MIC Output hidden" ; render
-MicOutputName = "JJOC MIC"              ; capture
+MicInputName = "JustVoice MIC Output hidden" ; render
+MicOutputName = "JustVoice MIC"              ; capture
 
-SpkInputName = "JJOC SPK"               ; render
-SpkOutputName = "JJOC SPK Input hidden" ; capture
+SpkInputName = "JustVoice SPK"               ; render
+SpkOutputName = "JustVoice SPK Input hidden" ; capture
 
 ;non-localizable
 KSNAME_WaveCapture="WaveCaptureTemplate"
