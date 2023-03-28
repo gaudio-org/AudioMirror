@@ -1,0 +1,227 @@
+;
+; JustVoice.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class = Media
+ClassGuid = {4d36e96c-e325-11ce-bfc1-08002be10318}
+Provider=%OrganizationName% ; defined later in Strings section
+CatalogFile=JustVoice.cat
+DriverVer= ; set DriverVer in stampinf property pages
+DriverPackageDisplayName=%DriverDisplayName%
+
+[DestinationDirs]
+DefaultDestDir = 12 ; DIRID_DRIVERS
+JustVoice_Device_CoInstaller_CopyFiles = 11
+
+; ================= Class section =====================
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+JustVoice.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%OrganizationName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%JustVoice.DeviceDesc%=JustVoice_Device, Root\JustVoice
+
+[JustVoice_Device.NT]
+Include=ks.inf,wdmaudio.inf
+Needs=KS.Registration, WDMAUDIO.Registration
+CopyFiles=Drivers_Dir
+AddReg=PinNameRegistration
+
+[Drivers_Dir]
+JustVoice.sys
+
+[PinNameRegistration]
+HKR,%MEDIA_CATEGORIES%\%MicInputNameGUID%,Name,,%MicInputName%
+HKR,%MEDIA_CATEGORIES%\%MicOutputNameGUID%,Name,,%MicOutputName%
+HKR,%MEDIA_CATEGORIES%\%SpkInputNameGUID%,Name,,%SpkInputName%
+HKR,%MEDIA_CATEGORIES%\%SpkOutputNameGUID%,Name,,%SpkOutputName%
+
+;-------------- Service installation
+[JustVoice_Device.NT.Services]
+AddService = JustVoice,%SPSVCINST_ASSOCSERVICE%, JustVoice_Service_Inst
+
+; -------------- JustVoice driver install sections
+[JustVoice_Service_Inst]
+DisplayName    = %JustVoice.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\JustVoice.sys
+
+
+; ------------- Capture device1
+[JustVoice.Interface.WaveCaptureTemplate]
+AddReg=JustVoice.Interface.WaveCaptureTemplate.AddReg
+
+[JustVoice.Interface.WaveCaptureTemplate.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.WaveCapture.FriendlyName%
+
+[JustVoice.Interface.TopologyCaptureTemplate]
+AddReg=JustVoice.Interface.TopologyCaptureTemplate.AddReg
+
+[JustVoice.Interface.TopologyCaptureTemplate.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.TopologyCapture.FriendlyName%
+; The following lines opt-in to pull mode.
+HKR,EP\0,%PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
+HKR,EP\0,%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+; ------------- Render device1
+[JustVoice.Interface.WaveRenderTemplate]
+AddReg=JustVoice.Interface.WaveRenderTemplate.AddReg
+[JustVoice.Interface.WaveRenderTemplate.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.WaveRender.FriendlyName%
+
+[JustVoice.Interface.TopologyRenderTemplate]
+AddReg=JustVoice.Interface.TopologyRenderTemplate.AddReg
+
+[JustVoice.Interface.TopologyRenderTemplate.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.TopologyRender.FriendlyName%
+; The following lines opt-in to pull mode.
+HKR,EP\0,%PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
+HKR,EP\0,%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+; ------------- Capture device2
+[JustVoice.Interface.WaveCaptureTemplate2]
+AddReg=JustVoice.Interface.WaveCaptureTemplate2.AddReg
+
+[JustVoice.Interface.WaveCaptureTemplate2.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.WaveCapture.FriendlyName2%
+
+[JustVoice.Interface.TopologyCaptureTemplate2]
+AddReg=JustVoice.Interface.TopologyCaptureTemplate2.AddReg
+
+[JustVoice.Interface.TopologyCaptureTemplate2.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.TopologyCapture.FriendlyName2%
+; The following lines opt-in to pull mode.
+HKR,EP\0,%PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
+HKR,EP\0,%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+; ------------- Render device2
+[JustVoice.Interface.WaveRenderTemplate2]
+AddReg=JustVoice.Interface.WaveRenderTemplate2.AddReg
+
+[JustVoice.Interface.WaveRenderTemplate2.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.WaveRender.FriendlyName2%
+
+[JustVoice.Interface.TopologyRenderTemplate2]
+AddReg=JustVoice.Interface.TopologyRenderTemplate2.AddReg
+
+[JustVoice.Interface.TopologyRenderTemplate2.AddReg]
+HKR,,CLSID,,%KSProxy.CLSID%
+HKR,,FriendlyName,,%JustVoice.TopologyRender.FriendlyName2%
+; The following lines opt-in to pull mode.
+HKR,EP\0,%PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
+HKR,EP\0,%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+[JustVoice_Device.NT.Interfaces]
+; -------------- Interface template definition
+; Capture1
+AddInterface=%KSCATEGORY_AUDIO%,    %KSNAME_WaveCapture%, JustVoice.Interface.WaveCaptureTemplate
+AddInterface=%KSCATEGORY_REALTIME%, %KSNAME_WaveCapture%, JustVoice.Interface.WaveCaptureTemplate
+AddInterface=%KSCATEGORY_CAPTURE%,  %KSNAME_WaveCapture%, JustVoice.Interface.WaveCaptureTemplate
+AddInterface=%KSCATEGORY_AUDIO%,    %KSNAME_TopologyCapture%, JustVoice.Interface.TopologyCaptureTemplate
+AddInterface=%KSCATEGORY_TOPOLOGY%, %KSNAME_TopologyCapture%, JustVoice.Interface.TopologyCaptureTemplate
+
+; Capture2
+AddInterface=%KSCATEGORY_AUDIO%,    %KSNAME_WaveCapture2%, JustVoice.Interface.WaveCaptureTemplate2
+AddInterface=%KSCATEGORY_REALTIME%, %KSNAME_WaveCapture2%, JustVoice.Interface.WaveCaptureTemplate2
+AddInterface=%KSCATEGORY_CAPTURE%,  %KSNAME_WaveCapture2%, JustVoice.Interface.WaveCaptureTemplate2
+AddInterface=%KSCATEGORY_AUDIO%,    %KSNAME_TopologyCapture2%, JustVoice.Interface.TopologyCaptureTemplate2
+AddInterface=%KSCATEGORY_TOPOLOGY%, %KSNAME_TopologyCapture2%, JustVoice.Interface.TopologyCaptureTemplate2
+
+; Render1
+AddInterface=%KSCATEGORY_AUDIO%, %KSNAME_WaveRender%, JustVoice.Interface.WaveRenderTemplate
+AddInterface=%KSCATEGORY_RENDER%, %KSNAME_WaveRender%, JustVoice.Interface.WaveRenderTemplate
+AddInterface=%KSCATEGORY_REALTIME%, %KSNAME_WaveRender%, JustVoice.Interface.WaveRenderTemplate
+AddInterface=%KSCATEGORY_AUDIO%, %KSNAME_TopologyRender%, JustVoice.Interface.TopologyRenderTemplate
+AddInterface=%KSCATEGORY_TOPOLOGY%, %KSNAME_TopologyRender%, JustVoice.Interface.TopologyRenderTemplate
+
+; Render2
+AddInterface=%KSCATEGORY_AUDIO%, %KSNAME_WaveRender2%, JustVoice.Interface.WaveRenderTemplate2
+AddInterface=%KSCATEGORY_RENDER%, %KSNAME_WaveRender2%, JustVoice.Interface.WaveRenderTemplate2
+AddInterface=%KSCATEGORY_REALTIME%, %KSNAME_WaveRender2%, JustVoice.Interface.WaveRenderTemplate2
+AddInterface=%KSCATEGORY_AUDIO%, %KSNAME_TopologyRender2%, JustVoice.Interface.TopologyRenderTemplate2
+AddInterface=%KSCATEGORY_TOPOLOGY%, %KSNAME_TopologyRender2%, JustVoice.Interface.TopologyRenderTemplate2
+
+[JustVoice_Device.NT.Wdf]
+KmdfService =  JustVoice, JustVoice_wdfsect
+[JustVoice_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+OrganizationName="Gaudio Lab, Inc."
+DriverDisplayName="JustVoice Drivers"
+DiskName="JustVoice Installation Disk"
+JustVoice.DeviceDesc="Gaudio Lab Virtual Device"
+JustVoice.SVCDESC="JustVoice Service"
+
+JustVoice.WaveCapture.FriendlyName="JustVoice Wave Input"
+JustVoice.TopologyCapture.FriendlyName="JustVoice Topology Input"
+
+JustVoice.WaveCapture.FriendlyName2="JustVoice Wave Input2"
+JustVoice.TopologyCapture.FriendlyName2="JustVoice Topology Input2"
+
+JustVoice.WaveRender.FriendlyName="JustVoice Wave Output"
+JustVoice.TopologyRender.FriendlyName="JustVoice Topology Output"
+
+JustVoice.WaveRender.FriendlyName2="JustVoice Wave Output2"
+JustVoice.TopologyRender.FriendlyName2="JustVoice Topology Output2"
+
+MEDIA_CATEGORIES = "MediaCategories"
+
+MicOutputNameGUID = {15a31160-df6b-4f89-80b0-9bb81259115c}
+SpkOutputNameGUID = {9919ca3f-29ca-4728-bbb7-07cdf682e248}
+
+MicInputNameGUID = {618ad392-bec0-4b2d-bd89-e505e169dd55}
+SpkInputNameGUID = {1c7320d9-2fce-4214-94fd-ac1acff4122a}
+
+MicInputName = "JustVoice MIC Output hidden" ; render
+MicOutputName = "JustVoice MIC"              ; capture
+
+SpkInputName = "JustVoice SPK"               ; render
+SpkOutputName = "JustVoice SPK Input hidden" ; capture
+
+;non-localizable
+KSNAME_WaveCapture="WaveCaptureTemplate"
+KSNAME_TopologyCapture="TopologyCaptureTemplate"
+
+KSNAME_WaveCapture2="WaveCaptureTemplate2"
+KSNAME_TopologyCapture2="TopologyCaptureTemplate2"
+
+KSNAME_WaveRender="WaveRenderTemplate"
+KSNAME_TopologyRender="TopologyRenderTemplate"
+
+KSNAME_WaveRender2="WaveRenderTemplate2"
+KSNAME_TopologyRender2="TopologyRenderTemplate2"
+
+KSNODETYPE_ANY   = "{00000000-0000-0000-0000-000000000000}"
+
+KSProxy.CLSID="17CCA71B-ECD7-11D0-B908-00A0C9223196"
+KSCATEGORY_AUDIO="{6994AD04-93EF-11D0-A3CC-00A0C9223196}"
+KSCATEGORY_RENDER="{65E8773E-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_CAPTURE="{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_REALTIME ="{EB115FFC-10C8-4964-831D-6DCB02E6F23F}"
+KSCATEGORY_TOPOLOGY = "{DDA54A40-1E4C-11D1-A050-405705C10000}"
+
+PKEY_AudioEndpoint_Association               = "{1DA5D803-D492-4EDD-8C23-E0C0FFEE7F0E},2"
+PKEY_AudioEndpoint_Supports_EventDriven_Mode = "{1DA5D803-D492-4EDD-8C23-E0C0FFEE7F0E},7"
