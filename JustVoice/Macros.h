@@ -3,7 +3,7 @@
 
 #pragma warning (disable : 4127)
 
-#define STR_MODULENAME              "AudioMirror: "
+#define STR_MODULENAME              "JustVoice: "
 
 // Debug utility macros
 #define D_FUNC                      4
