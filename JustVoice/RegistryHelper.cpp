@@ -41,7 +41,7 @@ Return Value:
 
 	// Allocate the KEY_BASIC_INFORMATION structure
 	ulBasicInfoLength = sizeof(KEY_BASIC_INFORMATION) + MAX_DEVICE_REG_KEY_LENGTH;
-	kBasicInfo = (PKEY_BASIC_INFORMATION)ExAllocatePoolWithTag(NonPagedPoolNx, ulBasicInfoLength, MINIADAPTER_POOLTAG);
+	kBasicInfo = (PKEY_BASIC_INFORMATION)ExAllocatePool2(POOL_FLAG_NON_PAGED, ulBasicInfoLength, MINIADAPTER_POOLTAG);
 	IF_TRUE_ACTION_JUMP(kBasicInfo == NULL, ntStatus = STATUS_INSUFFICIENT_RESOURCES, Exit);
 
 	ntStatus = STATUS_SUCCESS;
@@ -60,7 +60,7 @@ Return Value:
 			// Free and re-allocate the KEY_BASIC_INFORMATION structure with the correct size.
 			ExFreePoolWithTag(kBasicInfo, MINIADAPTER_POOLTAG);
 			ulBasicInfoLength = ulBasicInfoResultLength;
-			kBasicInfo = (PKEY_BASIC_INFORMATION)ExAllocatePoolWithTag(NonPagedPoolNx, ulBasicInfoLength, MINIADAPTER_POOLTAG);
+			kBasicInfo = (PKEY_BASIC_INFORMATION)ExAllocatePool2(POOL_FLAG_NON_PAGED, ulBasicInfoLength, MINIADAPTER_POOLTAG);
 			IF_TRUE_ACTION_JUMP(kBasicInfo == NULL, ntStatus = STATUS_INSUFFICIENT_RESOURCES, loop_exit);
 
 			// Try to enumerate the current key again.
@@ -76,7 +76,7 @@ Return Value:
 		}
 
 		// Allocate the key name string 
-		pwstrKeyName = (PWSTR)ExAllocatePoolWithTag(NonPagedPoolNx, kBasicInfo->NameLength + sizeof(WCHAR), MINIADAPTER_POOLTAG);
+		pwstrKeyName = (PWSTR)ExAllocatePool2(POOL_FLAG_NON_PAGED, kBasicInfo->NameLength + sizeof(WCHAR), MINIADAPTER_POOLTAG);
 		IF_TRUE_ACTION_JUMP(kBasicInfo == NULL, ntStatus = STATUS_INSUFFICIENT_RESOURCES, loop_exit);
 
 		// Copy the key name from the basic information struct
@@ -168,7 +168,7 @@ Return Value:
 	PAGED_CODE();
 	// Allocate the KEY_VALUE_FULL_INFORMATION structure
 	ulFullInfoLength = sizeof(KEY_VALUE_FULL_INFORMATION) + MAX_DEVICE_REG_KEY_LENGTH;
-	kvFullInfo = (PKEY_VALUE_FULL_INFORMATION)ExAllocatePoolWithTag(NonPagedPoolNx, ulFullInfoLength, MINIADAPTER_POOLTAG);
+	kvFullInfo = (PKEY_VALUE_FULL_INFORMATION)ExAllocatePool2(POOL_FLAG_NON_PAGED, ulFullInfoLength, MINIADAPTER_POOLTAG);
 	IF_TRUE_ACTION_JUMP(kvFullInfo == NULL, ntStatus = STATUS_INSUFFICIENT_RESOURCES, Exit);
 
 	// Iterate over each value and copy it to the destination
@@ -188,7 +188,7 @@ Return Value:
 
 			ulFullInfoLength = ulFullInfoResultLength;
 
-			kvFullInfo = (PKEY_VALUE_FULL_INFORMATION)ExAllocatePoolWithTag(NonPagedPoolNx, ulFullInfoLength, MINIADAPTER_POOLTAG);
+			kvFullInfo = (PKEY_VALUE_FULL_INFORMATION)ExAllocatePool2(POOL_FLAG_NON_PAGED, ulFullInfoLength, MINIADAPTER_POOLTAG);
 			IF_TRUE_ACTION_JUMP(kvFullInfo == NULL, ntStatus = STATUS_INSUFFICIENT_RESOURCES, loop_exit);
 
 			// Try to enumerate the current value again
@@ -204,7 +204,7 @@ Return Value:
 		}
 
 		// Allocate the key value name string
-		pwstrKeyValueName = (PWSTR)ExAllocatePoolWithTag(NonPagedPoolNx, kvFullInfo->NameLength + sizeof(WCHAR) * 2, MINIADAPTER_POOLTAG);
+		pwstrKeyValueName = (PWSTR)ExAllocatePool2(POOL_FLAG_NON_PAGED, kvFullInfo->NameLength + sizeof(WCHAR) * 2, MINIADAPTER_POOLTAG);
 		IF_TRUE_ACTION_JUMP(kvFullInfo == NULL, ntStatus = STATUS_INSUFFICIENT_RESOURCES, loop_exit);
 
 		// Copy the key value name from the full information struct

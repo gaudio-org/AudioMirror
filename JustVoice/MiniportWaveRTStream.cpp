@@ -220,40 +220,37 @@ Return Value:
 	m_bCapture = Capture_;
 	m_ulDmaMovementRate = pWfEx->nAvgBytesPerSec;
 
-	m_pDpc = (PRKDPC)ExAllocatePoolWithTag(NonPagedPoolNx, sizeof(KDPC), MINWAVERTSTREAM_POOLTAG);
+	m_pDpc = (PRKDPC)ExAllocatePool2(POOL_FLAG_NON_PAGED, sizeof(KDPC), MINWAVERTSTREAM_POOLTAG);
 	if (!m_pDpc)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	m_pWfExt = (PWAVEFORMATEXTENSIBLE)ExAllocatePoolWithTag(NonPagedPoolNx, sizeof(WAVEFORMATEX) + pWfEx->cbSize, MINWAVERTSTREAM_POOLTAG);
+	m_pWfExt = (PWAVEFORMATEXTENSIBLE)ExAllocatePool2(POOL_FLAG_NON_PAGED, sizeof(WAVEFORMATEX) + pWfEx->cbSize, MINWAVERTSTREAM_POOLTAG);
 	if (m_pWfExt == NULL)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 	RtlCopyMemory(m_pWfExt, pWfEx, sizeof(WAVEFORMATEX) + pWfEx->cbSize);
 
-	m_pbMuted = (PBOOL)ExAllocatePoolWithTag(NonPagedPoolNx, m_pWfExt->Format.nChannels * sizeof(BOOL), MINWAVERTSTREAM_POOLTAG);
+	m_pbMuted = (PBOOL)ExAllocatePool2(POOL_FLAG_NON_PAGED, m_pWfExt->Format.nChannels * sizeof(BOOL), MINWAVERTSTREAM_POOLTAG);
 	if (m_pbMuted == NULL)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
-	RtlZeroMemory(m_pbMuted, m_pWfExt->Format.nChannels * sizeof(BOOL));
-
-	m_plVolumeLevel = (PLONG)ExAllocatePoolWithTag(NonPagedPoolNx, m_pWfExt->Format.nChannels * sizeof(LONG), MINWAVERTSTREAM_POOLTAG);
+	
+	m_plVolumeLevel = (PLONG)ExAllocatePool2(POOL_FLAG_NON_PAGED, m_pWfExt->Format.nChannels * sizeof(LONG), MINWAVERTSTREAM_POOLTAG);
 	if (m_plVolumeLevel == NULL)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
-	RtlZeroMemory(m_plVolumeLevel, m_pWfExt->Format.nChannels * sizeof(LONG));
-
-	m_plPeakMeter = (PLONG)ExAllocatePoolWithTag(NonPagedPoolNx, m_pWfExt->Format.nChannels * sizeof(LONG), MINWAVERTSTREAM_POOLTAG);
+	
+	m_plPeakMeter = (PLONG)ExAllocatePool2(POOL_FLAG_NON_PAGED, m_pWfExt->Format.nChannels * sizeof(LONG), MINWAVERTSTREAM_POOLTAG);
 	if (m_plPeakMeter == NULL)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
-	RtlZeroMemory(m_plPeakMeter, m_pWfExt->Format.nChannels * sizeof(LONG));
-
+	
 	//
 	// Register this stream.
 	//
@@ -455,8 +452,8 @@ NTSTATUS MiniportWaveRTStream::RegisterNotificationEvent
 
 	PAGED_CODE();
 
-	NotificationListEntry *nleNew = (NotificationListEntry*)ExAllocatePoolWithTag(
-		NonPagedPoolNx,
+	NotificationListEntry *nleNew = (NotificationListEntry*)ExAllocatePool2(
+		POOL_FLAG_NON_PAGED,
 		sizeof(NotificationListEntry),
 		MINWAVERTSTREAM_POOLTAG);
 	if (NULL == nleNew)

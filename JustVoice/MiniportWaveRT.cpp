@@ -96,12 +96,11 @@ Return Value:
 	}
 	// System streams.
 	size = sizeof(MiniportWaveRTStream*) * m_ulMaxSystemStreams;
-	m_SystemStreams = (MiniportWaveRTStream**)ExAllocatePoolWithTag(NonPagedPoolNx, size, WAVERT_POOLTAG);
+	m_SystemStreams = (MiniportWaveRTStream**)ExAllocatePool2(POOL_FLAG_NON_PAGED, size, WAVERT_POOLTAG);
 	if (m_SystemStreams == NULL)
 	{
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
-	RtlZeroMemory(m_SystemStreams, size);
 	return ntStatus;
 } // Init
 

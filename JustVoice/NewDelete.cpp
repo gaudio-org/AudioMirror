@@ -45,7 +45,7 @@ PVOID operator new
 	ULONG           tag
 	)
 {
-	PVOID result = ExAllocatePoolWithTag(poolType, iSize, tag);
+	PVOID result = ExAllocatePool2(poolType, iSize, tag);
 
 	if (result)
 	{
@@ -70,7 +70,7 @@ PVOID operator new
 	POOL_TYPE       poolType
 	)
 {
-	PVOID result = ExAllocatePoolWithTag(poolType, iSize, DRIVER_POOLTAG);
+	PVOID result = ExAllocatePool2(poolType, iSize, DRIVER_POOLTAG);
 
 	if (result)
 	{
