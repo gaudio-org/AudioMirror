@@ -49,13 +49,13 @@ NTSTATUS RingBuffer::Init(SIZE_T bufferSize, SIZE_T nByteAlign)
 	}
 
 	KeAcquireSpinLock(m_BufferLock, &m_SpinLockIrql);
-	m_Buffer = static_cast<BYTE*>(ExAllocatePoolWithTag(NonPagedPoolNx, bufferSize, RING_BUFFER_TAG));
+	m_Buffer = static_cast<BYTE*>(ExAllocatePool2(POOL_FLAG_NON_PAGED, bufferSize, RING_BUFFER_TAG));
 	if (m_Buffer == NULL) 
 	{
 		KeReleaseSpinLock(m_BufferLock, m_SpinLockIrql);
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
-	m_AlignBuffer = static_cast<BYTE*>(ExAllocatePoolWithTag(NonPagedPoolNx, nByteAlign, RING_BUFFER_TAG));
+	m_AlignBuffer = static_cast<BYTE*>(ExAllocatePool2(POOL_FLAG_NON_PAGED, nByteAlign, RING_BUFFER_TAG));
 	if (m_AlignBuffer == NULL)
 	{
 		ExFreePoolWithTag(m_Buffer, RING_BUFFER_TAG);
